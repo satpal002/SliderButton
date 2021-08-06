@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="sliderButtonStyle">
+        <attr name="backgroundLottie" format="reference"/>
+        <attr name="thumbDrawable" format="reference"/>
+        <attr name="sliderBackground" format="reference"/>
+        <attr name="textBackground" format="reference"/>
+        <attr name="sliderTypeface" format="reference"/>
+
+        <attr name="primaryText" format="string"/>
+        <attr name="primaryTextColor" format="color"/>
+        <attr name="primaryTextSize" format="dimension"/>
+
+        <attr name="secondaryText" format="string"/>
+        <attr name="secondaryTextColor" format="color"/>
+        <attr name="secondaryTextSize" format="dimension"/>
+
+        <attr name="textStartMargin" format="dimension"/>
+        <attr name="seekBarProgressDrawable" format="reference"/>
+
+        <attr name="lottieAnimationTime" format="integer"/>
+        <attr name="lottieAnimationDelay" format="integer"/>
+
+        <attr name="seekBarMinAllowedProgress" format="integer"/>
+        <attr name="seekBarMaxAllowedProgress" format="integer"/>
+
+
+    </declare-styleable>
+</resources>

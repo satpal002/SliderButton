@@ -1,0 +1,3 @@
+rootProject.name = "SliderButtonExample"
+include ':app'
+include ':sliderbuttonlib'
