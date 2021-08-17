@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FCFEFF"
+    android:background="#422296"
     tools:context=".MainActivity">
 
     <com.satpal.sliderbutton.SliderButtonView
@@ -19,6 +19,8 @@
         app:lottieAnimationDelay="3000"
         app:lottieAnimationTime="700"
         app:primaryText="Welcome"
+        app:primaryTextSize="20sp"
+        app:secondaryTextSize="12sp"
         app:secondaryText="Please swipe to unlock"
         app:textBackground="@drawable/slider_text_bg"
         app:textStartMargin="95dp" />

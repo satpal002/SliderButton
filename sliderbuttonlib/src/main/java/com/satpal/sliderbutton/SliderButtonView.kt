@@ -125,11 +125,11 @@ class SliderButtonView @JvmOverloads constructor(
                         }
                         R.styleable.sliderButtonStyle_primaryTextSize -> {
                             val dimen = a.getDimension(attr, spToPx(10f))
-                            tvPrimaryText!!.setTextSize(dimen)
+                            tvPrimaryText!!.setTextSize(pxToSp(dimen))
                         }
                         R.styleable.sliderButtonStyle_secondaryTextSize -> {
                             val dimen = a.getDimension(attr, spToPx(10f))
-                            tvSecondaryText!!.setTextSize(dimen)
+                            tvSecondaryText!!.setTextSize(pxToSp(dimen))
                         }
                         R.styleable.sliderButtonStyle_seekBarProgressDrawable -> {
                             val drawable = resources.getDrawable(a.getResourceId(attr, -1), null)
@@ -245,6 +245,10 @@ class SliderButtonView @JvmOverloads constructor(
 
     private fun spToPx(sp: Float) =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, resources.displayMetrics)
+
+
+    private fun pxToSp(px: Float) =
+      px/resources.displayMetrics.scaledDensity
 
     private fun dpToPx(dp: Float) =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
