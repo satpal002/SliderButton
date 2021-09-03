@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity(), ISliderButtonCallbacks {
         setContentView(R.layout.activity_main)
 
         val sliderButtonView = findViewById<SliderButtonView>(R.id.slider_button)
-        sliderButtonView.callbacks = this
+        sliderButtonView.setCallback(this)
     }
 
     override fun sliderUnlocked() {

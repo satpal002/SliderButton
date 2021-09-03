@@ -30,7 +30,7 @@ class SliderButtonView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     var seekBar: SeekBar
     var lottieAnimationView: LottieAnimationView
-    var handlerAnimationDelay: Handler
+    var handlerAnimationDelay: Handler?
     var tvPrimaryText: TextView
     var tvSecondaryText: TextView
     var middleBackground: ImageView
@@ -42,8 +42,8 @@ class SliderButtonView @JvmOverloads constructor(
 
     private var seekBarTouched = false
     var bounceAnimator: ObjectAnimator
-    var runnableBounce: Runnable
-    var callbacks: ISliderButtonCallbacks? = null
+    var runnableBounce: Runnable?
+    private var callbacks: ISliderButtonCallbacks? = null
 
     init {
         val inflater =
@@ -65,7 +65,6 @@ class SliderButtonView @JvmOverloads constructor(
         handlerAnimationDelay = Handler(Looper.getMainLooper())
         bounceAnimator = ObjectAnimator.ofInt(seekBar, "progress", 10)
         runnableBounce = Runnable {
-            Log.wtf("satpal", "startTimerToBounce: ${handlerAnimationDelay}")
             seekBar.progress = seekBarMinAllowedProgress
             lottieAnimationView.playAnimation()
 
@@ -85,7 +84,6 @@ class SliderButtonView @JvmOverloads constructor(
         seekBar.progress = seekBarMinAllowedProgress
 
         try {
-            startTimerToBounce()
             setSeekBarEvents()
 
             val a: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.sliderButtonStyle)
@@ -176,41 +174,54 @@ class SliderButtonView @JvmOverloads constructor(
         }
     }
 
-    private fun setCallback(callbacks: ISliderButtonCallbacks) {
+    fun setCallback(callbacks: ISliderButtonCallbacks) {
         this.callbacks = callbacks
+        startTimerToBounce()
     }
 
     private fun startTimerToBounce() {
-        if (!seekBarTouched) {
-            bounceAnimator.cancel()
+        try {
+            if (!seekBarTouched) {
+                bounceAnimator.cancel()
 
-            handlerAnimationDelay.removeCallbacksAndMessages(null)
-            handlerAnimationDelay.postDelayed(runnableBounce, animationRepeatDelay)
+                handlerAnimationDelay?.removeCallbacksAndMessages(null)
+                handlerAnimationDelay?.postDelayed(runnableBounce, animationRepeatDelay)
+            }
+        } catch (e: Exception) {
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        try {
+            handlerAnimationDelay?.removeCallbacksAndMessages(null)
+            runnableBounce = null
+            handlerAnimationDelay = null
+        } catch (e: Exception) {
         }
     }
 
     private fun setSeekBarEvents() {
 
         seekBar.setOnTouchListener { view: View, motionEvent: MotionEvent ->
-            Log.wtf("satpal", "seekbar: ${motionEvent}, progress: ${seekBar.progress}")
             when (motionEvent.action) {
                 ACTION_DOWN -> {
                     seekBarTouched = true
-                    handlerAnimationDelay.removeCallbacksAndMessages(null)
+                    handlerAnimationDelay?.removeCallbacksAndMessages(null)
                 }
                 ACTION_UP -> {
                     if (seekBar.progress >= seekBarMaxAllowedProgress) {
                         callbacks?.sliderUnlocked()
                     }
-                        seekBarTouched = false
+                    seekBarTouched = false
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            seekBar.setProgress(seekBarMinAllowedProgress, true)
-                        } else {
-                            seekBar.setProgress(seekBarMinAllowedProgress)
-                        }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        seekBar.setProgress(seekBarMinAllowedProgress, true)
+                    } else {
+                        seekBar.setProgress(seekBarMinAllowedProgress)
+                    }
 
-                        startTimerToBounce()
+                    startTimerToBounce()
 
                 }
                 ACTION_OUTSIDE -> {
@@ -248,7 +259,7 @@ class SliderButtonView @JvmOverloads constructor(
 
 
     private fun pxToSp(px: Float) =
-      px/resources.displayMetrics.scaledDensity
+        px / resources.displayMetrics.scaledDensity
 
     private fun dpToPx(dp: Float) =
         TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.displayMetrics)
